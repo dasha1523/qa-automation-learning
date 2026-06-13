@@ -37,10 +37,9 @@ first_test = {
 response = requests.post ('https://jsonplaceholder.typicode.com/users', json=first_test)
 
 # Проверяем, что ответ от сервера равен 201. Выводим ошибку в том случае, если ответ от сервера НЕ равен 201
-try:
-    assert response.status_code == 201
-except requests.exceptions.HTTPError as e:
-    print(f" HTTP ошибка: {e.response.status_code}")
+assert response.status_code == 201
+if response.status_code != 201:
+    print(f" Непредвиденная HTTP ошибка: {response.status_code}")
 
 # Выводим id пользователя
 users = response.json()
