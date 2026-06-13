@@ -34,7 +34,7 @@ first_test = {
     "userId": 1
 }
 
-response = requests.post ('https://jsonplaceholder.typicode.com/users', json=first_test)
+response = requests.post ('https://jsonplaceholder.typicode.com/posts', json=first_test)
 
 # Проверяем, что ответ от сервера равен 201. Выводим ошибку в том случае, если ответ от сервера НЕ равен 201
 assert response.status_code == 201
@@ -43,6 +43,7 @@ if response.status_code != 201:
 
 # Выводим id пользователя
 users = response.json()
+assert 'id' in users
 print (f" id пользователя равно {users['id']}")
 
 # Словарь, для себя, чтобы смотреть ошибки
