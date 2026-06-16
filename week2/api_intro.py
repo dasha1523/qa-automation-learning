@@ -1,3 +1,4 @@
+from requests.exceptions import HTTPError
 import requests
 
 #Задание 1: Разведка боем (просто GET)
@@ -34,25 +35,34 @@ first_test = {
     "userId": 1
 }
 
-response = requests.post ('https://jsonplaceholder.typicode.com/posts', json=first_test)
-
+try:
+    response = requests.post ('https://jsonplaceholder.typicode.com/posts', json=first_test)
 # Проверяем, что ответ от сервера равен 201. Выводим ошибку в том случае, если ответ от сервера НЕ равен 201
-assert response.status_code == 201
-if response.status_code != 201:
-    print(f" Непредвиденная HTTP ошибка: {response.status_code}")
+    response.raise_for_status()
 
 # Выводим id пользователя
-users = response.json()
-assert 'id' in users
-print (f" id пользователя равно {users['id']}")
+    users = response.json()
+    assert 'id' in users, "'id' отсутствует в ответе"
+    print (f" id пользователя равно {users['id']}")
+
+except HTTPError as e:
+    print(f" Непредвиденная HTTP ошибка {e.response.status_code}")
+
+except Exception as e:
+    print(f" Ошибка {e}")
 
 # Словарь, для себя, чтобы смотреть ошибки
 # help(requests.exceptions)
 
 # Задание 4: Обработка ошибок
 print("Задание 4")
-response = requests.get('https://jsonplaceholder.typicode.com/posts/999')
-if response.status_code == 404:
-    print("Пост не найден")
-else:
-    print("Что-то пошло не так")
+try:
+    response = requests.get('https://jsonplaceholder.typicode.com/posts/999')
+    response.raise_for_status()
+    print("Пост найден")
+
+except HTTPError as e:
+    if e.response.status_code == 404:
+        print("Пост не найден")
+    else:
+        print(f" Что-то пошло не так. HTTP ошибка {e.response.status_code}")
