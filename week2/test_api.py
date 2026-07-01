@@ -47,7 +47,7 @@ def test_create_new_post(base_url):
     }
     response = requests.post(f'{base_url}/posts', json=first_test)
 
-    assert response.status_code == 201, f"Ожидали 200, получили {response.status_code}"
+    assert response.status_code == 201, f"Ожидали 201, получили {response.status_code}"
     users = response.json()
     assert 'id' in users, "'id' отсутствует в ответе"
     assert isinstance(users['title'], str), "Поле 'title' другого типа"
